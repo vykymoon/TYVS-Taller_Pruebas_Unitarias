@@ -69,4 +69,41 @@ class RegistryTest {
         // Assert
         assertEquals(RegisterResult.INVALID, result);
     }
+    @Test
+    public void shouldRejectWhenIdIsZeroOrNegative() {
+        Person invalido = new Person("Luis", 0, 30, Gender.MALE, true);
+        assertEquals(RegisterResult.INVALID, registry.registerVoter(invalido));
+    }
+
+    @Test
+    public void shouldRejectUnderageAt17() {
+        Person menor = new Person("Sofia", 10, 17, Gender.FEMALE, true);
+        assertEquals(RegisterResult.UNDERAGE, registry.registerVoter(menor));
+    }
+
+    @Test
+    public void shouldAcceptAdultAt18() {
+        Person adulto = new Person("Sofia", 11, 18, Gender.FEMALE, true);
+        assertEquals(RegisterResult.VALID, registry.registerVoter(adulto));
+    }
+
+    @Test
+    public void shouldAcceptMaxAge120() {
+        Person anciano = new Person("Pedro", 12, 120, Gender.MALE, true);
+        assertEquals(RegisterResult.VALID, registry.registerVoter(anciano));
+    }
+
+    @Test
+    public void shouldRejectInvalidAgeOver120() {
+        Person imposible = new Person("Ana", 13, 121, Gender.FEMALE, true);
+        assertEquals(RegisterResult.INVALID_AGE, registry.registerVoter(imposible));
+    }
+
+    @Test
+    public void shouldRejectDuplicatedId() {
+        Person primero = new Person("Carlos", 14, 30, Gender.MALE, true);
+        Person duplicado = new Person("Carla", 14, 25, Gender.FEMALE, true);
+        registry.registerVoter(primero);
+        assertEquals(RegisterResult.DUPLICATED, registry.registerVoter(duplicado));
+    }
 }

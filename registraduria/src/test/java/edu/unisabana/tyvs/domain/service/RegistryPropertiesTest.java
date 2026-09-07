@@ -27,10 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * rompio, sino la MAS SIMPLE que la rompe (shrinking). Si "edad 73 con nombre
  * 'xkqz'" falla, le reportara "edad 0 con nombre ''", que es mucho mas facil
  * de diagnosticar.
- *
- * OJO: estas propiedades corresponden a las reglas YA implementadas
- * (iteraciones 1 y 2). Las de edad y duplicados son parte de su ejercicio; el
- * README explica como escribirlas.
  */
 class RegistryPropertiesTest {
 
@@ -113,7 +109,7 @@ class RegistryPropertiesTest {
         org.junit.jupiter.api.Assertions.assertNotNull(resultado);
     }
 
-        // R5: menor de edad -> UNDERAGE
+    // R5: menor de edad -> UNDERAGE
     @Property
     void todoMenorDeEdadEsRechazado(
             @ForAll("nombres") String nombre,

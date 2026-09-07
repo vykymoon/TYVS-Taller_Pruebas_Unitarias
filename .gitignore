@@ -16,3 +16,9 @@ registraduria/target/
 target/
 
 *.ini
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# jqwik
+registraduria/.jqwik-database

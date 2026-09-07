@@ -112,4 +112,61 @@ class RegistryPropertiesTest {
 
         org.junit.jupiter.api.Assertions.assertNotNull(resultado);
     }
+
+        // R5: menor de edad -> UNDERAGE
+    @Property
+    void todoMenorDeEdadEsRechazado(
+            @ForAll("nombres") String nombre,
+            @ForAll @IntRange(min = 1, max = 100_000) int id,
+            @ForAll @IntRange(min = 0, max = 17) int edad,
+            @ForAll("generos") Gender genero) {
+
+        Person menor = new Person(nombre, id, edad, genero, true);
+
+        assertEquals(RegisterResult.UNDERAGE, new Registry().registerVoter(menor));
+    }
+
+    // R7: adulto valido no registrado antes -> VALID
+    @Property
+    void todoAdultoValidoSeRegistra(
+            @ForAll("nombres") String nombre,
+            @ForAll @IntRange(min = 1, max = 100_000) int id,
+            @ForAll @IntRange(min = 18, max = 120) int edad,
+            @ForAll("generos") Gender genero) {
+
+        Person adulto = new Person(nombre, id, edad, genero, true);
+
+        assertEquals(RegisterResult.VALID, new Registry().registerVoter(adulto));
+    }
+
+    // R2: id <= 0 -> INVALID
+    @Property
+    void unIdNoPositivoSiempreEsInvalido(
+            @ForAll("nombres") String nombre,
+            @ForAll @IntRange(min = -100_000, max = 0) int id,
+            @ForAll @IntRange(min = 0, max = 120) int edad,
+            @ForAll("generos") Gender genero,
+            @ForAll boolean viva) {
+
+        Person p = new Person(nombre, id, edad, genero, viva);
+
+        assertEquals(RegisterResult.INVALID, new Registry().registerVoter(p));
+    }
+
+    // Estructural: una persona rechazada no queda registrada
+    @Property
+    void unaPersonaRechazadaNuncaQuedaRegistrada(
+            @ForAll("nombres") String nombre,
+            @ForAll @IntRange(min = 1, max = 100_000) int id,
+            @ForAll @IntRange(min = 0, max = 17) int edad,
+            @ForAll("generos") Gender genero) {
+
+        Registry registry = new Registry();
+        Person menor = new Person(nombre, id, edad, genero, true);
+
+        RegisterResult primerIntento = registry.registerVoter(menor);
+        RegisterResult segundoIntento = registry.registerVoter(menor);
+
+        assertEquals(primerIntento, segundoIntento);
+    }
 }

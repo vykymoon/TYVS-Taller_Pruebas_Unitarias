@@ -100,6 +100,12 @@ class RegistryTest {
     }
 
     @Test
+    public void shouldReturnUnderageWhenAgeIsZero() {
+        Person recienNacido = new Person("Bebe", 1001, 0, Gender.MALE, true);
+        assertEquals(RegisterResult.UNDERAGE, registry.registerVoter(recienNacido));
+    }
+
+    @Test
     public void shouldRejectDuplicatedId() {
         Person primero = new Person("Carlos", 14, 30, Gender.MALE, true);
         Person duplicado = new Person("Carla", 14, 25, Gender.FEMALE, true);
